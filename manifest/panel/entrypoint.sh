@@ -45,10 +45,10 @@ function startServer {
         echo "# This file was generated on first start and contains " >> /data/pterodactyl.conf
         echo "# the key for sensitive information. All panel configuration " >> /data/pterodactyl.conf
         echo "# can be done here using the normal method (NGINX not included!)," >> /data/pterodactyl.conf
-        echo "# or using Docker's environment variables parameter." >> /data/pterodactyl.conf
+        echo "# or using Docker's environment variables parameter. Environment variables override this!" >> /data/pterodactyl.conf
         echo "##" >> /data/pterodactyl.conf
         echo "" >> /data/pterodactyl.conf
-        echo "APP_KEY=SomeRandomString3232RandomString" >> /data/pterodactyl.conf
+        cat .env.example >> /data/pterodactyl.conf
 
         sleep 5
 

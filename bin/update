@@ -1,0 +1,12 @@
+#!/bin/sh
+
+##
+# /update - update the project
+##
+
+cd $(dirname $0)/../
+
+# Check if git exists or not
+if [ ! -d .git ]; then
+    echo ".git does not exist, we cannot update to the latest panel!
+fi

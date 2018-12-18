@@ -2,31 +2,16 @@
 
 <p><b>WARNING!</b> Before you start, it is recommended that you have a good understanding of Pterodactyl and Docker. This Quick start will be going through with using docker-compose.</p>
 
-First make sure that your docker build is up to date (At the time, this works on Docker CE 17.x).
+First make sure that your docker build is up to date (At the time, this works on Docker CE 17.x). Clone/Download this repository to your local storage. You can do that by doing `git clone https://github.com/ccarney16/pterodactyl-docker pterodactyl`.
 
 
-Clone/Download the repository to your local storage.
+Rename the provided `.env.example` as `.env`. Use your favorite editor to change all the settings. It is strongly recommended to change the database passwords.
 
-
-Rename the provided `.env.example` as `.env`
-
-
-Edit variables to fit your need, such as database password and URL.
-
-
-Run `docker-compose pull` to pull down the images. After `docker-compose up -d mysql` to start up mysql (Be sure to wait roughly 10-30 seconds to ensure that the database starts up).
-
-
-When the base is set up, then run `docker-compose up -d panel`. This may take anywhere from 30 seconds to a few minutes when the panel starts up.
-
-
-To create a user account, run `docker-compose run --rm panel php artisan p:user:make`
-
-
+To initialize the panel, just run `bin/init`. During the configuration step, most settings set in .env will be displayed, modification is not needed.
 Now login to the panel using the given URL provided in .env and set up the daemon.
 
 
-Copy the configuration to `/srv/daemon/config/core.json`. It is recommended to change the network parameters or the daemon may crash (If you have not used pterodactyl before, it will attempt to use the 172.18.0.0/16 block). In json notation, you should modify `docker.network.interfaces.v4.subnet` and `docker.network.interfaces.v4.gateway`.
+Copy the configuration to `/srv/daemon/config/core.json`. Before starting the pterodactyl daemon, it is recommended to create the `pterodactyl_nw` network. That can be achieved by running `docker network create pterodactyl_nw`. Also make sure that the docker root is exposed to the daemon container, it is required for logging purposes.
 
 
 Run `docker-compose up -d daemon` to complete setting up.

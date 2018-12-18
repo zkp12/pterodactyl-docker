@@ -1,0 +1,121 @@
+#!/bin/sh
+
+##
+# /init - runs the installer for pterodactyl
+# WARNING! This is for anyone who is brand new to this type of setup and automatically assumes most of the configuration, be warned
+##
+
+## Functions
+# Returns the help message
+function _return_help {
+	echo ""
+	echo "Pterodactyl Panel Deployment Script"
+	echo "Usage: $0 COMMAND [options]"
+	echo ""
+	echo "Main commands:"
+	echo ""
+    echo "panel                 Deploy the panel."
+    echo "daemon                Deploy the daemon."
+    echo "ssl                   Enable SSL support."
+    echo ""
+	echo "Built in options:"
+	echo ""
+	echo " --help  , -h      - returns this screen"
+	echo ""
+}
+
+function _build_project {
+    # Creates the service
+    echo "Building Project..."
+    docker-compose pull --quiet
+    docker-compose up --no-build --no-start
+}
+
+## Commands
+
+# Setup the panel service
+function _command_panel {
+    _build_project
+
+    # Checks if mysql is a service
+    if [ ! $(docker-compose ps --services | grep panel) == "panel" ]; then
+        echo "Panel service does not exist, aborting setup!"
+        exit
+    fi
+
+    # Checks if mysql is a service
+    if [ $(docker-compose ps --services | grep mysql) == "mysql" ]; then
+        echo "Mysql (MariaDB) exists, starting service"
+        docker-compose up -d mysql
+
+        # Wait for MySQL to finish its setup if needed
+        sleep 10
+    else
+        echo "Mysql (MariaDB) has been disabled/removed in docker-compose.yml! Ignoring database setup"
+    fi
+
+    # Running initial setup
+    echo "Running Configuration"
+    docker-compose run --no-deps --rm panel "cp .env.example /data/pterodactyl.conf"
+    docker-compose run --no-deps --rm panel "php artisan key:generate --force"
+    docker-compose run --no-deps --rm panel "php artisan p:environment:setup"
+    docker-compose run --no-deps --rm panel "php artisan p:environment:database"
+
+    # Initialize database
+    echo "Setting up database..."
+    docker-compose run --rm panel php artisan migrate --seed --force
+    docker-compose run --rm panel php artisan p:user:make
+
+    # Start entire setup
+    echo "Starting Panel..."
+    docker-compose up -d panel
+
+    echo "Panel Init Complete! to restart and stop the panel, consult docker-compose."
+}
+
+function _command_daemon {
+    _build_project
+
+    if [ ! $(docker-compose ps --services | grep daemon) == "daemon" ]; then
+        echo "Daemon service does not exist, aborting setup!"
+        exit
+    fi
+
+}
+
+cd $(dirname $0)/../
+
+# Fixing some nonsense with function returning
+IFS=
+
+_COMPOSE_EXE="$(command -v docker-compose)"
+
+if [[ -z "$_COMPOSE_EXE" ]]; then
+    echo "docker-compose not found, exiting..."
+    exit 2
+fi
+
+# Split our arguements into seperate sections
+_command=()
+for ((i=1; i<=$#; i++)); do
+    if [[ "${!i}" =~ "--" || ${!i} =~ "-" ]]; then
+        case ${!i} in
+            --help | -h)
+                _return_help
+                exit
+                ;;
+        esac
+    else
+        _command+=("${!i}")
+    fi
+done
+
+if [ ${#_command[@]} -gt 0 ]; then
+    if [ "$(type -t "_command_${_command[0]}")" = "function" ]; then 
+        "_command_${_command[0]}"
+    else 
+        _return_help
+    fi
+else 
+	_return_help
+fi
