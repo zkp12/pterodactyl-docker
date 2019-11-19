@@ -3,5 +3,4 @@ db/
 mysql_db/
 ssl/
 letsencrypt/
-.env
 docker-compose.override.yml
