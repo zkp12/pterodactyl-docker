@@ -10,12 +10,12 @@ services:
 # your game servers be able to access this, be sure 
 # to declare your ports.
 ##
-  mysql:
-    env_file: .env
-    image: mariadb:10.2
-    restart: always
-    volumes:
-    - ./db:/var/lib/mysql
+  # mysql:
+    # env_file: .env
+    # image: mariadb:10.2
+    # restart: always
+    # volumes:
+    # - ./db:/var/lib/mysql
 
 # Panel Cache
 # This service is required for the panel to function.
@@ -33,7 +33,7 @@ services:
   panel:
     depends_on:
     - cache
-    - mysql
+    # - mysql
     env_file: .env
     image: ccarney16/pterodactyl-panel:latest
     restart: always
