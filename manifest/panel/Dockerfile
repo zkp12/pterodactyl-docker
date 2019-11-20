@@ -16,8 +16,9 @@ RUN \
  && mkdir -p /var/www/html /run/nginx
  
 RUN \
- curl -Lo panel.tar.gz https://github.com/Pterodactyl/Panel/archive/${PANEL_VERSION}.tar.gz \
- && tar --strip-components=1 -xzvf panel.tar.gz \
+ curl -Lo panel.tar.gz https://github.com/Pterodactyl/Panel/archive/${PANEL_VERSION}.tar.gz
+RUN \
+ tar --strip-components=1 -xzvf panel.tar.gz \
  && rm panel.tar.gz \
  && chmod -R 755 storage/* bootstrap/cache \
  && find storage -type d > .storage.tmpl \
