@@ -2,7 +2,7 @@ FROM node:8-alpine
 
 MAINTAINER Cameron Carney <ccarney16@live.com>
 
-ARG VERSION
+ARG VERSION=v0.6.12
 
 ENV DAEMON_VERSION=${VERSION} \
     UID=500
