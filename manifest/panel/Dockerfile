@@ -18,8 +18,9 @@ RUN \
 RUN \
  curl -Lo panel.tar.gz https://github.com/Pterodactyl/Panel/archive/${PANEL_VERSION}.tar.gz
 RUN \
- tar --strip-components=1 -xzvf panel.tar.gz \
- && rm panel.tar.gz \
+ tar --strip-components=1 -xzvf panel.tar.gz
+RUN
+ rm panel.tar.gz \
  && chmod -R 755 storage/* bootstrap/cache
 RUN \
  find storage -type d > .storage.tmpl \
