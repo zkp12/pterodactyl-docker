@@ -9,6 +9,7 @@ ENV STARTUP_TIMEOUT=5 \
 
 WORKDIR /var/www/html
 
+RUN echo "Hello!"
 RUN echo ${VERSION}
 RUN echo ${PANEL_VERSION}
 
