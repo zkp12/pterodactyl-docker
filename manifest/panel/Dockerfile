@@ -9,8 +9,8 @@ ENV STARTUP_TIMEOUT=5 \
 
 WORKDIR /var/www/html
 
-RUN echo $VERSION
-RUN echo $PANEL_VERSION
+RUN echo ${VERSION}
+RUN echo ${PANEL_VERSION}
 
 RUN \
  apk --update add curl gettext tar nginx php7 php7 php7-bcmath php7-common php7-dom php7-fileinfo \
