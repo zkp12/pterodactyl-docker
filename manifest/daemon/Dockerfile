@@ -24,6 +24,6 @@ RUN \
 
 EXPOSE 8080
 
-ADD ["entrypoint.sh", "./"]
+ADD /scripts/ /opt/scripts/
 
-ENTRYPOINT ["entrypoint.sh"]
+ENTRYPOINT ["/opt/scripts/entrypoint.sh"]
