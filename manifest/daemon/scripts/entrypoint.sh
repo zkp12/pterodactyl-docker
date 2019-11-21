@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "Starting docker...."
+
 cd /srv/daemon
 echo "Starting docker...."
 docker start
