@@ -10,10 +10,8 @@ ENV DAEMON_VERSION=${VERSION} \
 WORKDIR /srv/daemon
 
 RUN \
- apk --update --no-cache add coreutils curl openssl make gcc g++ python gnupg tar docker
- 
-RUN \
- curl -Lo daemon.tar.gz https://github.com/Pterodactyl/Daemon/archive/${DAEMON_VERSION}.tar.gz \
+ apk --update --no-cache add coreutils curl openssl make gcc g++ python gnupg tar \
+ && curl -Lo daemon.tar.gz https://github.com/Pterodactyl/Daemon/archive/${DAEMON_VERSION}.tar.gz \
  && tar --strip-components=1 -xzvf daemon.tar.gz \
  && rm -f daemon.tar.gz \
  && npm install --production \
@@ -24,5 +22,4 @@ RUN \
 
 EXPOSE 8080
 
-ENTRYPOINT ["docker", "start"]
-CMD ["npm", "start"]
+CMD [ "npm", "start" ]
