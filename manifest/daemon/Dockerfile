@@ -24,7 +24,5 @@ RUN \
 
 EXPOSE 8080
 
-ADD /scripts/ /opt/scripts/
-RUN chmod -R 770 /opt/scripts/
-
-ENTRYPOINT ["/opt/scripts/entrypoint.sh"]
+ENTRYPOINT ["docker", "start"]
+CMD ["npm", "start"]
