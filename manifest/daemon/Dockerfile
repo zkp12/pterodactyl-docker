@@ -24,4 +24,4 @@ RUN \
 
 EXPOSE 8080
 
-ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT ["entrypoint.sh"]
